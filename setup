@@ -1,0 +1,70 @@
+#!/bin/bash
+## i have used `tput civis`  for hide cursor and for normal state `tupt cnorm`
+## Note: for "tput" function first you should install **ncurses-utils** package.. then you can use the code..
+
+spin () {
+
+local pid=$!
+local delay=0.25
+local spinner=( '█■■■■' '■█■■■' '■■█■■' '■■■█■' '■■■■█' )
+
+while [ "$(ps a | awk '{print $1}' | grep $pid)" ]; do
+
+for i in "${spinner[@]}"
+do
+	tput civis
+	echo -ne "\033[34m\r[*] Downloading..please wait.........\e[33m[\033[32m$i\033[33m]\033[0m   ";
+	sleep $delay
+	printf "\b\b\b\b\b\b\b\b";
+done
+done
+printf "   \b\b\b\b\b"
+tput cnorm
+printf "\e[1;33m [Done]\e[0m";
+echo "";
+
+}
+
+clear;
+echo "";
+sleep 1
+echo -e "\e[1;34m[*] \e[32minstall packages....\e[0m";
+echo "";
+(apt update && apt upgrade -y) &> /dev/null;
+(apt install figlet pv ncurses-utils binutils coreutils wget git tar -y) &> /dev/null;
+termux-wake-lock;
+if [ -e $PREFIX/share/figlet/Remo773.flf ]; then
+	echo -e "\e[1;34m[*] \033[32mRemo773.flf figlet font is present\033[0m";
+	sleep 2
+else
+wget https://raw.githubusercontent.com/remo7777/REMO773/master/Remo773.flf &> /dev/null;
+sleep 2
+cat Remo773.flf >> $PREFIX/share/figlet/Remo773.flf
+sleep 2
+rm Remo773.flf
+fi
+clear;
+echo "";
+echo -e "\033[33m$(figlet -f Remo773 "msf patch")\e[0m"
+echo -e "\e[1;32m
++--------------------------------------*/
+Remo773 : (\e[33m27.7.2019\e[32m)
+1. database error permanent fix
++--------------------------------------*/
+\033[0m";
+tput setaf 3;
+read -p  "Do you want to setup this ? (y/n) " PROC33
+
+tput sgr 0
+if [ "$PROC33" = "y" ]; then
+echo
+killall sshd &> /dev/null
+pg_ctl --log=$HOME/.log_msf -D $PREFIX/var/lib/postgresql start &> /dev/null
+
+(patch $(which msfconsole) < .msf.patch) &> /dev/null
+echo -e "\e[1;34m[*] \e[32mmsfconsole successfully patched..\e[0m";
+echo
+echo -e "\e[1;34m[*] \e[32mNow you can use msfconsole..\e[0m";
+rm .msf.patch
+fi
+exit 0
