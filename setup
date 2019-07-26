@@ -65,6 +65,7 @@ pg_ctl --log=$HOME/.log_msf -D $PREFIX/var/lib/postgresql start &> /dev/null
 echo -e "\e[1;34m[*] \e[32mmsfconsole successfully patched..\e[0m";
 echo
 echo -e "\e[1;34m[*] \e[32mNow you can use msfconsole..\e[0m";
-rm .msf.patch
+#rm .msf.patch
+termux-wake-unlock
 fi
 exit 0
