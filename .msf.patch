@@ -1,0 +1,16 @@
+--- /data/data/com.termux/files/usr/bin/msfconsole	2019-07-27 01:29:15.709992227 +0530
++++ newmsfconsole	2019-07-27 01:27:58.369992257 +0530
+@@ -1,4 +1,4 @@
+-#!/data/data/com.termux/files/usr/bin/sh
++#!/data/data/com.termux/files/usr/bin/bash
+ 
+ SCRIPT_NAME=$(basename "$0")
+ METASPLOIT_PATH="/data/data/com.termux/files/usr/opt/metasploit-framework"
+@@ -23,6 +23,7 @@
+ 
+ case "$SCRIPT_NAME" in
+ 	msfconsole|msfd|msfrpc|msfrpcd|msfvenom)
++		pg_ctl --log=$HOME/.log_msf -D $PREFIX/var/lib/postgresql restart &> /dev/null
+ 		exec ruby "$METASPLOIT_PATH/$SCRIPT_NAME" "$@"
+ 		;;
+ 	*)
