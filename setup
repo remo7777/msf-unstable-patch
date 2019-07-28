@@ -58,7 +58,8 @@ read -p  "Do you want to setup this ? (y/n) " PROC33
 tput sgr 0
 if [ "$PROC33" = "y" ]; then
 echo
-killall sshd &> /dev/null
+if [ -d $PREFIX/opt/metasploit-framework ]; then
+killall postgres &> /dev/null
 pg_ctl --log=$HOME/.log_msf -D $PREFIX/var/lib/postgresql start &> /dev/null
 
 (patch $(which msfconsole) < .msf.patch) &> /dev/null
@@ -66,6 +67,9 @@ echo -e "\e[1;34m[*] \e[32mmsfconsole successfully patched..\e[0m";
 echo
 echo -e "\e[1;34m[*] \e[32mNow you can use msfconsole..\e[0m";
 #rm .msf.patch
+else
+echo -e "\e[1;34m[*] \e[32mi am sorry. you haven't download metasploit from unstable-repo or your metasploit not present on $PREFIX/opt directory..\e[0m";
+fi
 termux-wake-unlock
 fi
 exit 0
