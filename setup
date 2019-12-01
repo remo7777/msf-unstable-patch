@@ -48,7 +48,7 @@ echo "";
 echo -e "\033[33m$(figlet -f Remo773 "msf patch")\e[0m"
 echo -e "\e[1;32m
 +--------------------------------------*/
-Remo773 : (\e[33m27.7.2019\e[32m)
+Remo773 : (\e[33m1.12.2019\e[32m)
 1. database error permanent fix
 +--------------------------------------*/
 \033[0m";
@@ -59,6 +59,10 @@ tput sgr 0
 if [ "$PROC33" = "y" ]; then
 echo
 if [ -d $PREFIX/opt/metasploit-framework ]; then
+mkdir -p $PREFIX/var/lib/postgresql &> /dev/null
+initdb $PREFIX/var/lib/postgresql &> /dev/null
+pg_ctl -D $PREFIX/var/lib/postgresql start &> /dev/null
+pg_ctl -D $PREFIX/var/lib/postgresql stop &> /dev/null
 killall postgres &> /dev/null
 pg_ctl --log=$HOME/.log_msf -D $PREFIX/var/lib/postgresql start &> /dev/null
 
