@@ -59,6 +59,7 @@ tput sgr 0
 if [ "$PROC33" = "y" ]; then
 echo
 if [ -d $PREFIX/opt/metasploit-framework ]; then
+rm -rf $PREFIX/var/lib/postgresql &> /dev/null
 mkdir -p $PREFIX/var/lib/postgresql &> /dev/null
 initdb $PREFIX/var/lib/postgresql &> /dev/null
 pg_ctl -D $PREFIX/var/lib/postgresql start &> /dev/null
