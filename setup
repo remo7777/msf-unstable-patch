@@ -57,8 +57,19 @@ read -p  "Do you want to setup this ? (y/n) " PROC33
 
 tput sgr 0
 if [ "$PROC33" = "y" ]; then
-echo
+
 if [ -d $PREFIX/opt/metasploit-framework ]; then
+echo
+pg_ctl -D $PREFIX/var/lib/postgresql restart &> /dev/null
+proces=`ps -e | grep postgres | head -n 1 | gawk '{ print $4 }'`
+
+if [ "$proces" = "postgres" ]; then
+(patch $(which msfconsole) < .msf.patch) &> /dev/null
+echo -e "\e[1;34m[*] \e[32mmsfconsole successfully patched..\e[0m";
+echo
+echo -e "\e[1;34m[*] \e[32mNow you can use msfconsole..\e[0
+m";
+else
 rm -rf $PREFIX/var/lib/postgresql &> /dev/null
 mkdir -p $PREFIX/var/lib/postgresql &> /dev/null
 initdb $PREFIX/var/lib/postgresql &> /dev/null
@@ -72,10 +83,11 @@ pg_ctl --log=$HOME/.log_msf -D $PREFIX/var/lib/postgresql start &> /dev/null
 echo -e "\e[1;34m[*] \e[32mmsfconsole successfully patched..\e[0m";
 echo
 echo -e "\e[1;34m[*] \e[32mNow you can use msfconsole..\e[0m";
+fi
 #rm .msf.patch
 else
 echo -e "\e[1;34m[*] \e[32mi am sorry. you haven't download metasploit from unstable-repo or your metasploit not present on $PREFIX/opt directory..\e[0m";
 fi
-termux-wake-unlock
 fi
+termux-wake-unlock
 exit 0
